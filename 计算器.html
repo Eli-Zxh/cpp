@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+    <meta charset="UTF-8">//使用UTF-8编码 不清楚是否更优 但ANSCI编码出现混乱
+    <meta name="viewport">//使用通用的viewport虚拟窗口调整大小
+    <title>Casio</title>
+    <style>
+        body {
+            font-family: 'Arial',sans-serif;
+            text-align:center;
+        }
+
+        div {
+            margin:10px;
+        }
+
+        input {
+            width: 500px;
+            padding: 10px;
+            font: size 32px;
+        }
+
+        button {
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript" src="./Mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">//调用mathjax开源项目渲染</script>
+    <script type="text/javascript">
+        MathJax.Hub.Config({
+            tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        });//定义内联数学显示，即在文本中出现标识符$$或者\\之间的内容被渲染
+        var latexContainer;//拟用来作为渲染的文本容器，前后加标识符
+        var input='';//输入文本
+        var string;//拟用来作为传给qalqualate的计算文本
+        var pasttypein = '';//用作记录上一个输入
+        var ANS = '';
+        function calculate(){
+            
+            renderMath()
+        };//拟调用qalqualate计算，还没写
+        function renderMath(){
+            latexContainer.innerHTML = '$$'+ input + '$$';
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, latexContainer]);//执行typese操作，渲染latexContainer
+        };
+        function appendToDisplay(typein){
+            pasttypein = typein;
+            input += typein;
+            renderMath();
+        }
+        function clearone(){
+            input=input.slice(0,-1);//从第0个截取到最后一个元素，开区间，即删除最后一个元素
+            renderMath();
+        };
+        function clearall(){
+            ANS=input;
+            input='';//使用slice赋值空
+            renderMath();
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            // 在页面加载完成后执行
+            latexContainer = document.getElementById('latexContainer');
+        });
+    </script>
+</head>
+<body>
+    <div id="latexContainer"></div>
+    <div>
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="clearone()">DEL</button>
+        <button onclick="clearall()">AC</button>
+    </div>
+    <div>
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('*')">×</button>
+        <button onclick="appendToDisplay('/')">÷</button>
+    </div>
+    <div>
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="appendToDisplay('+')">+</button>
+        <button onclick="appendToDisplay('-')">-</button>
+    </div>
+    <div>
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        <button onclick="appendToDisplay('*10^')">×10ˣ</button>
+        <button onclick="input+=ANS">ANS</button>
+        <button onclick="calculate()">=</button>
+    </div>
+</body>
+</html>

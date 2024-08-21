@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算器网页版</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
+
+        div {
+            margin: 10px;
+        }
+
+        input {
+            width: 200px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 50px;
+            height: 50px;
+            font-size: 18px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript" src="./MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <script type="text/javascript">
+        MathJax.Hub.Config({
+            tex2jax: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        });
+
+        var latexContainer;
+        var input = '';
+        var latexChain;
+        var table = {
+            '+': 'add',
+            '-': 'minus',
+            '*': 'multipule',
+            '/': 'divide',
+            '!': 'factorial'
+        };
+
+        function appendToDisplay(typein) {
+            input += typein;
+            renderMath();
+        }
+
+        function calculate() {
+            try {
+                var result = math.evaluate(input);//使用直接书写计算
+                input = 'result';
+                renderMath();
+            } catch (error) {
+                input += '\\quad\\text{Error}';
+                renderMath();
+            }
+        }
+
+        function clearDisplay() {
+            input = '';
+            renderMath();
+        }
+
+        function renderMath() {
+            latexContainer.innerHTML = '$$' + input + '$$';
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, latexContainer]);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // 在页面加载完成后执行
+            latexContainer = document.getElementById('latexContainer');
+        });
+
+    </script>
+</head>
+
+<body>
+    <p>这是一个MathJax的例子: $$\frac{1}{2}$$</p>
+    <div>
+        <div id="latexContainer"></div>
+    </div>
+
+    <div>
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="appendToDisplay('+')">+</button>
+    </div>
+
+    <div>
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('-')">-</button>
+    </div>
+
+    <div>
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="appendToDisplay('*')">×</button>
+    </div>
+
+    <div>
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="appendToDisplay('/')">÷</button>
+        <button onclick="clearDisplay()">C</button>
+    </div>
+
+</body>
+
+</html>
